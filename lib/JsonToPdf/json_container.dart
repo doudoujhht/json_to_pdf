@@ -11,34 +11,47 @@ class Json_container {
   Json_container(this._container);
 
   pw.Alignment _getAlignment() {
-    String? alignment = _container['alignment'];
-    switch (alignment) {
-      case 'center':
-        return pw.Alignment.center;
-      case 'topCenter':
-        return pw.Alignment.topCenter;
-      case 'topLeft':
-        return pw.Alignment.topLeft;
-      case 'topRight':
-        return pw.Alignment.topRight;
-      case 'centerLeft':
-        return pw.Alignment.centerLeft;
-      case 'centerRight':
-        return pw.Alignment.centerRight;
-      case 'bottomCenter':
-        return pw.Alignment.bottomCenter;
-      case 'bottomLeft':
-        return pw.Alignment.bottomLeft;
-      case 'bottomRight':
-        return pw.Alignment.bottomRight;
-      case 'center':
-        return pw.Alignment.center;
+    Object alignment = _container['alignment'];
+    if (alignment is String) {
+      switch (alignment) {
+        case 'center':
+          return pw.Alignment.center;
+        case 'topCenter':
+          return pw.Alignment.topCenter;
+        case 'topLeft':
+          return pw.Alignment.topLeft;
+        case 'topRight':
+          return pw.Alignment.topRight;
+        case 'centerLeft':
+          return pw.Alignment.centerLeft;
+        case 'centerRight':
+          return pw.Alignment.centerRight;
+        case 'bottomCenter':
+          return pw.Alignment.bottomCenter;
+        case 'bottomLeft':
+          return pw.Alignment.bottomLeft;
+        case 'bottomRight':
+          return pw.Alignment.bottomRight;
+        default:
+          return pw.Alignment.center;
+      }
+    } else if (alignment is List<dynamic> && alignment.length == 2) {
+      for (var i = 0; i < alignment.length; i++) {
+        if (alignment[i] is int) {
+          alignment[i] = alignment[i].toDouble();
+          continue;
+        }
+        if(alignment[i] is! double || alignment[i] < -1 || alignment[i] > 1){
+          return pw.Alignment.center;
+        }
+      }
+      return pw.Alignment(alignment[0], alignment[1]);
+    } else {
+      return pw.Alignment.center;
     }
-    return pw.Alignment.center;
   }
 
 }
-
 Future<Map<String, dynamic>> loadJson() async {
   final file = File('./test.json');
   final jsonString = await file.readAsString();
