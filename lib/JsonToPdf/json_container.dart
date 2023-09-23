@@ -6,6 +6,11 @@ import 'dart:io';
 
 import 'dart:convert';
 
+
+
+// TODO: implementer les autres propriétés
+// TODO: creer une methode qui verifie si la propriete existe dans le json
+// TODO: implementer un systeme de retour d'erreur si la propriete n'existe pas
 class Json_container {
   Map<String, dynamic> _container;
   Json_container(this._container);
@@ -82,6 +87,23 @@ class Json_container {
     }
   }
 
+  double? _getwidth() {
+    final width = _container['width'];
+    if (width is int || width is double) {
+      return width.toDouble();
+    } else {
+      return null;
+    }
+  }
+  double? getheight() {
+    final height = _container['height'];
+    if (height is int || height is double) {
+      return height.toDouble();
+    } else {
+      return null;
+    }
+  }
+
 }
 Future<Map<String, dynamic>> loadJson() async {
   final file = File('./test.json');
@@ -95,4 +117,6 @@ void main() async {
   // print(jsonContainer._getAlignment());
   print(jsonContainer._getPadding());
   print(jsonContainer._getMargin());
+  print(jsonContainer._getwidth());
+  print(jsonContainer.getheight());
 }
